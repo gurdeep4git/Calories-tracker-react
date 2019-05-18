@@ -2,9 +2,19 @@ import React from "react";
 import { Row, Col, ListGroup } from "react-bootstrap";
 
 const mealsList = props => {
-    const meals = props.meals.map(meal => {
-        return <ListGroup.Item key={meal.id}>{meal.title}</ListGroup.Item>;
-    });
+    let meals = null;
+
+    if (props.meals.length > 0) {
+        meals = props.meals.map(meal => {
+            return (
+                <ListGroup.Item key={meal.id} data-id={meal.id}>
+                    {meal.meal}
+                </ListGroup.Item>
+            );
+        });
+    } else {
+        meals = <ListGroup.Item>Please add some meals!</ListGroup.Item>;
+    }
 
     return (
         <Row>

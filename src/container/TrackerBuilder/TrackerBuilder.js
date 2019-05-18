@@ -14,7 +14,7 @@ class TrackerBuilder extends Component {
         return (
             <Fragment>
                 <Container>
-                    <AddMeal clicked={this.props.addMeal} />
+                    <AddMeal addMealClickHandler={this.props.addMeal} />
                     <hr />
                     <MealsList meals={this.props.meals} />
                 </Container>
@@ -31,16 +31,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addMeal: () =>
+        addMeal: newMeal =>
             dispatch({
                 type: actionTypes.ADD_MEAL,
-                payload: {
-                    newMeal: {
-                        id: 3,
-                        title: "pizza",
-                        calories: 200
-                    }
-                }
+                newMeal: newMeal
             })
     };
 };
