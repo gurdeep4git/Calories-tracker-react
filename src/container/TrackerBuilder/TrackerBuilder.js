@@ -3,20 +3,24 @@ import { connect } from "react-redux";
 
 import AddMeal from "../../components/AddMeal/AddMeal";
 import MealsList from "../../components/MealsList/MealsList";
+import TotalCalories from "../../components/TotalCalories/TotalCalories";
 
 import { Container } from "react-bootstrap";
 
 import * as actionTypes from "../../store/actions";
 
 class TrackerBuilder extends Component {
-    state = {};
     render() {
         return (
             <Fragment>
                 <Container>
                     <AddMeal addMealClickHandler={this.props.addMeal} />
                     <hr />
-                    <MealsList meals={this.props.meals} />
+                    <TotalCalories totalCalories={this.props.totalCalories} />
+                    <MealsList
+                        meals={this.props.meals}
+                        deleteMealClickHandler={this.props.deleteMeal}
+                    />
                 </Container>
             </Fragment>
         );
@@ -25,7 +29,8 @@ class TrackerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        meals: state.meals
+        meals: state.meals,
+        totalCalories: state.totalCalories
     };
 };
 
@@ -35,6 +40,11 @@ const mapDispatchToProps = dispatch => {
             dispatch({
                 type: actionTypes.ADD_MEAL,
                 newMeal: newMeal
+            }),
+        deleteMeal: selectedMeal =>
+            dispatch({
+                type: actionTypes.DELETE_MEAL,
+                selectedMeal: selectedMeal
             })
     };
 };

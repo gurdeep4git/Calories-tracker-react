@@ -1,7 +1,9 @@
 import * as actionTypes from "./actions.js";
 
 const initialState = {
-    meals: [],
+    meals: [
+        //{ id: 1, meal: "burger", calories: 300 }
+    ],
     totalCalories: 0
 };
 
@@ -12,12 +14,31 @@ const reducer = (state = initialState, action) => {
             if (validateStatus) {
                 const newMeals = [...state.meals];
                 newMeals.push(action.newMeal);
+
+                const totalCalories =
+                    state.totalCalories + parseInt(action.newMeal.calories);
+
                 return {
                     ...state,
-                    meals: newMeals
+                    meals: newMeals,
+                    totalCalories: totalCalories
                 };
             }
             break;
+
+        case actionTypes.DELETE_MEAL:
+            const remainingMeals = state.meals.filter((meal, _i) => {
+                return meal.id !== action.selectedMeal.id;
+            });
+
+            const totalCalories =
+                state.totalCalories - parseInt(action.selectedMeal.calories);
+
+            return {
+                ...state,
+                meals: remainingMeals,
+                totalCalories: totalCalories
+            };
 
         default:
             return state;
