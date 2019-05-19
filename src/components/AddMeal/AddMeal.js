@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
+import { validate } from "@babel/types";
 
 class AddMeal extends Component {
     initialState = {
         id: 0,
         meal: "",
-        calories: ""
+        calories: "",
+        showErrors: false
     };
 
     constructor(props) {
@@ -28,8 +30,33 @@ class AddMeal extends Component {
     };
 
     onAddMealClickHandler = () => {
-        this.props.addMealClickHandler(this.state);
-        this.resetForm();
+        const validateStatus = this.validate(this.state);
+        if (validateStatus) {
+            this.props.addMealClickHandler(this.state);
+            this.resetForm();
+        } else {
+            this.setState({ showErrors: true });
+        }
+    };
+
+    validate = state => {
+        let status = true;
+        if (
+            state.meal === null ||
+            state.meal === undefined ||
+            state.meal === ""
+        ) {
+            status = false;
+        }
+        if (
+            state.calories === null ||
+            state.calories === undefined ||
+            state.calories === "" ||
+            state.calories === 0
+        ) {
+            status = false;
+        }
+        return status;
     };
 
     resetForm = () => {
@@ -50,6 +77,11 @@ class AddMeal extends Component {
                                 onChange={this.onInputChangeHandler}
                                 value={this.state.meal}
                             />
+                            {this.state.showErrors ? (
+                                <span className="small text-danger">
+                                    Field can't be empty
+                                </span>
+                            ) : null}
                         </Form.Group>
 
                         <Form.Group controlId="calories">
@@ -61,6 +93,11 @@ class AddMeal extends Component {
                                 onChange={this.onInputChangeHandler}
                                 value={this.state.calories}
                             />
+                            {this.state.showErrors ? (
+                                <span className="small text-danger">
+                                    Field can't be empty
+                                </span>
+                            ) : null}
                         </Form.Group>
 
                         <Button

@@ -10,59 +10,35 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_MEAL:
-            const validateStatus = validate(action.newMeal);
-            if (validateStatus) {
-                const newMeals = [...state.meals];
-                newMeals.push(action.newMeal);
+            const newMeals = [...state.meals];
+            newMeals.push(action.newMeal);
 
-                const totalCalories =
-                    state.totalCalories + parseInt(action.newMeal.calories);
+            const addedCalories =
+                state.totalCalories + parseInt(action.newMeal.calories);
 
-                return {
-                    ...state,
-                    meals: newMeals,
-                    totalCalories: totalCalories
-                };
-            }
-            break;
+            return {
+                ...state,
+                meals: newMeals,
+                totalCalories: addedCalories
+            };
 
         case actionTypes.DELETE_MEAL:
             const remainingMeals = state.meals.filter((meal, _i) => {
                 return meal.id !== action.selectedMeal.id;
             });
 
-            const totalCalories =
+            const diffCalories =
                 state.totalCalories - parseInt(action.selectedMeal.calories);
 
             return {
                 ...state,
                 meals: remainingMeals,
-                totalCalories: totalCalories
+                totalCalories: diffCalories
             };
 
         default:
             return state;
     }
-};
-
-const validate = newMeal => {
-    let status = true;
-    if (
-        newMeal.meal === null ||
-        newMeal.meal === undefined ||
-        newMeal.meal === ""
-    ) {
-        status = false;
-    }
-    if (
-        newMeal.calories === null ||
-        newMeal.calories === undefined ||
-        newMeal.calories === "" ||
-        newMeal.calories === 0
-    ) {
-        status = false;
-    }
-    return status;
 };
 
 export default reducer;
