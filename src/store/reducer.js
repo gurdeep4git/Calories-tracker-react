@@ -11,6 +11,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_MEAL:
             const newMeals = [...state.meals];
+            action.newMeal.id = getId();
             newMeals.push(action.newMeal);
 
             const addedCalories =
@@ -36,9 +37,39 @@ const reducer = (state = initialState, action) => {
                 totalCalories: diffCalories
             };
 
+            case actionTypes.EDIT_MEAL: {
+            const addedMeals = [...state.meals];
+            let totalCalories = 0;
+            addedMeals.forEach((meal, _i) => {
+                if(meal.id === action.selectedMeal.id){
+                    meal.meal = action.selectedMeal.meal;
+                    meal.calories = action.selectedMeal.calories;
+                }
+                totalCalories =totalCalories + parseInt(meal.calories);
+            });
+
+            return {
+                ...state,
+                meals: addedMeals,
+                selectedMeal: {},
+                totalCalories,
+            };
+        }
+        case actionTypes.SELECTED_MEAL: {
+        return {
+            ...state,
+            selectedMeal: action.selectedMeal,
+        };
+    }
         default:
             return state;
     }
+};
+
+const getId = () => {
+    return Math.random()
+        .toString(36)
+        .substr(2, 9);
 };
 
 export default reducer;
