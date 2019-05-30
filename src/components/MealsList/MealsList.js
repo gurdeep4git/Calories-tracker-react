@@ -14,7 +14,11 @@ const mealsList = props => {
                     <span>{meal.meal}</span>
                     <div className="d-inline-block">
                         <ButtonGroup aria-label="Basic example">
-                            <Button data-id={meal.id} variant="secondary">
+                            <Button data-id={meal.id} variant="secondary"
+                             onClick={() =>
+                                props.selectMealClickHandler(meal)
+                            }
+                            >
                                 Edit
                             </Button>
                             <Button

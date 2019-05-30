@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
-import { validate } from "@babel/types";
+import { connect } from "react-redux";
 
 class AddMeal extends Component {
     initialState = {
@@ -12,27 +12,21 @@ class AddMeal extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = this.initialState;
     }
 
     onInputChangeHandler = e => {
         this.setState({
-            id: this.getId(),
             [e.target.name]: e.target.value
         });
     };
 
-    getId = () => {
-        return Math.random()
-            .toString(36)
-            .substr(2, 9);
-    };
 
-    onAddMealClickHandler = () => {
+
+    onMealActionClickHandler = () => {
         const validateStatus = this.validate(this.state);
         if (validateStatus) {
-            this.props.addMealClickHandler(this.state);
+            this.props.mealActionClickHandler(this.state);
             this.resetForm();
         } else {
             this.setState({ showErrors: true });
@@ -62,6 +56,12 @@ class AddMeal extends Component {
     resetForm = () => {
         this.setState(this.initialState);
     };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.selectedMeal !== this.props.selectedMeal) {
+            this.setState(this.props.selectedMeal);
+        }
+    }
 
     render() {
         return (
@@ -103,9 +103,9 @@ class AddMeal extends Component {
                         <Button
                             variant="primary"
                             type="button"
-                            onClick={this.onAddMealClickHandler}
+                            onClick={this.onMealActionClickHandler}
                         >
-                            Add
+                            {this.props.selectedMeal && this.props.selectedMeal.id ? 'Update' : 'Add'}
                         </Button>
                     </Form>
                 </Col>

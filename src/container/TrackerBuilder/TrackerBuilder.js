@@ -14,12 +14,13 @@ class TrackerBuilder extends Component {
         return (
             <Fragment>
                 <Container>
-                    <AddMeal addMealClickHandler={this.props.addMeal} />
+                    <AddMeal mealActionClickHandler={this.props.selectedMeal && this.props.selectedMeal.id ? this.props.updateMeal : this.props.addMeal} selectedMeal={this.props.selectedMeal}/>
                     <hr />
                     <TotalCalories totalCalories={this.props.totalCalories} />
                     <MealsList
                         meals={this.props.meals}
                         deleteMealClickHandler={this.props.deleteMeal}
+                        selectMealClickHandler={this.props.selectMeal}
                     />
                 </Container>
             </Fragment>
@@ -27,10 +28,12 @@ class TrackerBuilder extends Component {
     }
 }
 
+
 const mapStateToProps = state => {
     return {
         meals: state.meals,
-        totalCalories: state.totalCalories
+        totalCalories: state.totalCalories,
+        selectedMeal: state.selectedMeal,
     };
 };
 
@@ -44,6 +47,16 @@ const mapDispatchToProps = dispatch => {
         deleteMeal: selectedMeal =>
             dispatch({
                 type: actionTypes.DELETE_MEAL,
+                selectedMeal: selectedMeal
+            }),
+        selectMeal: selectedMeal =>
+            dispatch({
+                type: actionTypes.SELECTED_MEAL,
+                selectedMeal: selectedMeal
+            }),
+        updateMeal: selectedMeal =>
+            dispatch({
+                type: actionTypes.EDIT_MEAL,
                 selectedMeal: selectedMeal
             })
     };
